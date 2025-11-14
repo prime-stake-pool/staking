@@ -16,6 +16,10 @@
   ],
   "routes": [
     {
+      "src": "/libs/(.*)",
+      "dest": "/libs/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }

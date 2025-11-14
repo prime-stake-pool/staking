@@ -11,17 +11,57 @@ let bech32Address = null;
 
 const sleep = ms => new Promise(res => setTimeout(res, ms));
 
-window.addEventListener("load", async () => {
-  if (!window.Cardano) {
-    console.error("❌ CSL NOT LOADED!");
-    messageEl.textContent = "⚠️ Serialization library not loaded!";
-    return;
-  }
-  console.log("✅ CSL Loaded:", window.Cardano);
+// Path to the CSL JavaScript and WebAssembly files
+const cardanoJsPath = "/libs/cardano_serialization_lib.min.js";
+const wasmPath = "/libs/cardano_serialization_lib_bg.wasm";
 
+// Dynamically load the WebAssembly and JavaScript files
+async function loadCardanoSerializationLib() {
+  try {
+    // Load the JavaScript file first
+    await loadScript(cardanoJsPath);
+    console.log("✅ CSL JavaScript loaded");
+
+    // Load the WebAssembly file
+    await loadWasm(wasmPath);
+    console.log("✅ CSL WebAssembly loaded");
+  } catch (err) {
+    console.error("❌ CSL failed to load:", err);
+    messageEl.textContent = "⚠️ Serialization library not loaded!";
+  }
+}
+
+// Helper function to dynamically load a script
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.body.appendChild(script);
+  });
+}
+
+// Helper function to load WebAssembly
+function loadWasm(src) {
+  return new Promise((resolve, reject) => {
+    fetch(src)
+      .then(response => response.arrayBuffer())
+      .then(bytes => WebAssembly.instantiate(bytes))
+      .then(resolve)
+      .catch(reject);
+  });
+}
+
+window.addEventListener("load", async () => {
+  // ✅ Load CSL JavaScript and WebAssembly
+  await loadCardanoSerializationLib();
+
+  // Detect and connect to Cardano wallets
   detectWallets();
 });
 
+// ================ WALLET DETECTION =======================
 async function detectWallets() {
   messageEl.textContent = "🔍 Detecting wallets...";
 
@@ -43,6 +83,7 @@ async function detectWallets() {
   renderWalletButtons();
 }
 
+// ================ RENDER WALLET BUTTONS =======================
 function renderWalletButtons() {
   walletButtonsDiv.innerHTML = "";
 
@@ -61,6 +102,7 @@ function renderWalletButtons() {
     : "⚠️ No supported wallets found.";
 }
 
+// ================ CONNECT WALLET =======================
 async function connectWallet(walletName) {
   try {
     messageEl.textContent = `🔌 Connecting to ${walletName}...`;
@@ -88,6 +130,7 @@ async function connectWallet(walletName) {
   }
 }
 
+// ================ SHOW DELEGATE BUTTON =======================
 function showDelegateButton() {
   delegateSection.innerHTML = "";
   const btn = document.createElement("button");
@@ -97,6 +140,7 @@ function showDelegateButton() {
   delegateSection.appendChild(btn);
 }
 
+// ================ SUBMIT DELEGATION =======================
 async function submitDelegation() {
   try {
     messageEl.textContent = "⏳ Preparing delegation...";
@@ -127,3 +171,4 @@ async function submitDelegation() {
     messageEl.textContent = `❌ Delegation failed: ${err.message}`;
   }
 }
+

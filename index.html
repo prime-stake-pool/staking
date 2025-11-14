@@ -5,10 +5,8 @@
   <title>Cardano Staking</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
 
-  <!-- ❌ REMOVED: Old CSL script tag (does not work in v15+)
-       ❌ REMOVED: window.Cardano check in <script>
-       This will now be handled in main.js
-  -->
+  <!-- ✅ Load CSL v11 global browser build (no WASM, works everywhere) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emurgo/cardano-serialization-lib-browser@11.2.1/cardano_serialization_lib.min.js"></script>
 
   <style>
     body {
@@ -108,7 +106,7 @@
     <p>Powered by <a href="https://primestakepool.com/" target="_blank">Prime Stake Pool</a></p>
   </div>
 
-  <!-- 🔥 Load main.js as ES module -->
+  <!-- ✅ Load your app -->
   <script type="module" src="main.js"></script>
 </body>
 </html>

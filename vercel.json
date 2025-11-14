@@ -1,0 +1,13 @@
+{
+  "headers": [
+    {
+      "source": "/cardano_serialization_lib_bg.wasm",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/wasm"
+        }
+      ]
+    }
+  ]
+}

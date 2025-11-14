@@ -1,6 +1,3 @@
-// 🔵 CSL v11 is already loaded globally from index.html
-// Available here as: window.Cardano
-
 const API_BASE = "https://cardano-wallet-backend.vercel.app/api/";
 
 const messageEl = document.getElementById("message");
@@ -8,7 +5,6 @@ const walletButtonsDiv = document.getElementById("wallet-buttons");
 const delegateSection = document.getElementById("delegate-section");
 
 const SUPPORTED_WALLETS = ["nami", "eternl", "yoroi", "lace"];
-
 let selectedWallet = null;
 let walletApi = null;
 let bech32Address = null;
@@ -16,24 +12,25 @@ let bech32Address = null;
 const sleep = ms => new Promise(res => setTimeout(res, ms));
 
 window.addEventListener("load", async () => {
+  // ✅ Ensure CSL is loaded
   if (!window.Cardano) {
-    console.error("❌ CSL v11 failed to load");
+    console.error("❌ CSL NOT LOADED!");
     messageEl.textContent = "⚠️ Serialization library not loaded!";
     return;
   }
+  console.log("✅ CSL Loaded:", window.Cardano);
 
-  console.log("✅ CSL v11 Loaded:", window.Cardano);
   detectWallets();
 });
 
-// ================= WALLET DETECTION =====================
+// ================ WALLET DETECTION =======================
 async function detectWallets() {
   messageEl.textContent = "🔍 Detecting wallets...";
 
   let attempts = 0;
   while (attempts < 20) {
     if (window.cardano && Object.keys(window.cardano).length > 0) {
-      console.log("💳 Wallets detected:", window.cardano);
+      console.log("Wallets detected:", window.cardano);
       break;
     }
     await sleep(300);
@@ -48,7 +45,7 @@ async function detectWallets() {
   renderWalletButtons();
 }
 
-// ================= RENDER WALLET BUTTONS =====================
+// ================ RENDER WALLET BUTTONS =======================
 function renderWalletButtons() {
   walletButtonsDiv.innerHTML = "";
 
@@ -67,7 +64,7 @@ function renderWalletButtons() {
     : "⚠️ No supported wallets found.";
 }
 
-// ================= CONNECT WALLET =====================
+// ================ CONNECT WALLET =======================
 async function connectWallet(walletName) {
   try {
     messageEl.textContent = `🔌 Connecting to ${walletName}...`;
@@ -84,15 +81,14 @@ async function connectWallet(walletName) {
 
     const addrHex = usedAddresses[0];
 
-    // Convert hex → bech32 using CSL v11
+    // Convert hex → bech32 using CSL
     const addrBytes = window.Cardano.Address.from_bytes(
       Buffer.from(addrHex, "hex")
     );
 
     bech32Address = addrBytes.to_bech32();
 
-    messageEl.textContent =
-      `✅ Connected: ${bech32Address.substring(0, 15)}...`;
+    messageEl.textContent = `✅ Connected: ${bech32Address.substring(0, 15)}...`;
 
     showDelegateButton();
   } catch (err) {
@@ -101,7 +97,7 @@ async function connectWallet(walletName) {
   }
 }
 
-// ================= SHOW DELEGATE BUTTON =====================
+// ================ SHOW DELEGATE BUTTON =======================
 function showDelegateButton() {
   delegateSection.innerHTML = "";
 
@@ -113,7 +109,7 @@ function showDelegateButton() {
   delegateSection.appendChild(btn);
 }
 
-// ================= SUBMIT DELEGATION =====================
+// ================ SUBMIT DELEGATION =======================
 async function submitDelegation() {
   try {
     messageEl.textContent = "⏳ Preparing delegation...";
@@ -139,8 +135,7 @@ async function submitDelegation() {
 
     if (!submitRes.ok) throw new Error(result.error);
 
-    messageEl.textContent =
-      `🎉 Delegation submitted! TxHash: ${result.txHash}`;
+    messageEl.textContent = `🎉 Delegation submitted! TxHash: ${result.txHash}`;
   } catch (err) {
     console.error("Delegation error:", err);
     messageEl.textContent = `❌ Delegation failed: ${err.message}`;

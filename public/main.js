@@ -8,8 +8,8 @@ let walletApi = null;
 let bech32Address = null;
 
 // Paths to CSL JS/WASM
-const cardanoJsPath = "./libs/cardano_serialization_lib.min.js";
-const wasmPath = "./libs/cardano_serialization_lib_bg.wasm";
+const cardanoJsPath = "/libs/cardano_serialization_lib.min.js";
+const wasmPath = "/libs/cardano_serialization_lib_bg.wasm";
 
 // Utility to load JS dynamically
 function loadScript(src) {

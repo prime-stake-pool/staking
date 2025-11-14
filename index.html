@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Cardano Staking</title>
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
-  <!-- Load CSL v15 as ES module -->
+  <!-- Load Cardano Serialization Library (local) -->
   <script type="module">
     import * as CardanoSerialization from "/libs/cardano_serialization_lib.min.js";
     window.Cardano = CardanoSerialization;
@@ -13,8 +13,14 @@
   </script>
 
   <style>
-    body { background: #0d1117; color: #e6edf3; font-family: "Segoe UI", Arial, sans-serif; margin: 0; padding: 0; }
-    .container { max-width: 600px; margin: 60px auto 0 auto; text-align: center; }
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container { max-width: 600px; margin: 60px auto; text-align: center; }
     h1 { font-size: 2rem; color: #58a6ff; margin-bottom: 10px; }
     #message { font-size: 1.1rem; margin-bottom: 20px; color: #c9d1d9; }
     #wallet-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 30px; }
@@ -40,9 +46,7 @@
     <p>Powered by <a href="https://primestakepool.com/" target="_blank">Prime Stake Pool</a></p>
   </div>
 
-  <!-- Load main.js as ES module -->
+  <!-- Load main.js -->
   <script type="module" src="/main.js"></script>
 </body>
 </html>
-
-  

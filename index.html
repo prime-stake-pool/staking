@@ -5,9 +5,9 @@
   <title>Cardano Staking</title>
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
-  <!-- Load CSL v15 as ES module -->
+  <!-- 🔥 Load CSL v15 as ES module -->
   <script type="module">
-    import * as CardanoSerialization from "https://cdn.jsdelivr.net/npm/@emurgo/cardano-serialization-lib-browser@15.0.1/cardano_serialization_lib.js";
+    import * as CardanoSerialization from "/libs/cardano_serialization_lib.js";
     window.Cardano = CardanoSerialization; // expose globally
     console.log("✅ CSL Loaded:", window.Cardano);
   </script>
@@ -111,7 +111,6 @@
   </div>
 
   <!-- 🔥 Load main.js as ES module -->
-  <script type="module" src="libs/cardano_serialization_lib.min.js"></script>
-  <script type="module" src="main.js"></script>
+  <script type="module" src="/main.js"></script>
 </body>
 </html>

@@ -3,6 +3,8 @@ const API_BASE = "https://cardano-wallet-backend.vercel.app/api/";
 const messageEl = document.getElementById("message");
 const walletButtonsDiv = document.getElementById("wallet-buttons");
 const delegateSection = document.getElementById("delegate-section");
+const wasmPath = "/libs/cardano_serialization_lib_bg.wasm";
+
 
 const SUPPORTED_WALLETS = ["nami", "eternl", "yoroi", "lace"];
 let selectedWallet = null;

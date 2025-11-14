@@ -1,21 +1,21 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "public/**/*", "use": "@vercel/static" }
-  ],
+  "public": true,
   "routes": [
-    { "src": "/(.*)", "dest": "/public/$1" },
-    { "src": "/", "dest": "/public/index.html" }
-  ],
-  "headers": [
     {
-      "source": "/libs/cardano_serialization_lib_bg.wasm",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/wasm"
-        }
-      ]
+      "src": "/libs/(.*)",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/wasm"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
-  ]
+  ],
+  "mimeTypes": {
+    "wasm": "application/wasm"
+  }
 }
+

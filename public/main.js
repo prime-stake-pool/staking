@@ -1,5 +1,3 @@
-const API_BASE = "https://cardano-wallet-backend.vercel.app/api/";
-
 const messageEl = document.getElementById("message");
 const walletButtonsDiv = document.getElementById("wallet-buttons");
 const delegateSection = document.getElementById("delegate-section");
@@ -9,13 +7,31 @@ let selectedWallet = null;
 let walletApi = null;
 let bech32Address = null;
 
-const sleep = ms => new Promise(res => setTimeout(res, ms));
-
-// Path to the CSL JavaScript and WebAssembly files
+// Paths to CSL JS/WASM
 const cardanoJsPath = "/libs/cardano_serialization_lib.min.js";
 const wasmPath = "/libs/cardano_serialization_lib_bg.wasm";
 
-// Dynamically load the WebAssembly and JavaScript files
+// Utility to load JS dynamically
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.type = "module";
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+// Utility to load WASM dynamically
+async function loadWasm(path) {
+  const response = await fetch(path);
+  if (!response.ok) throw new Error(`Failed to fetch WASM at ${path}`);
+  const bytes = await response.arrayBuffer();
+  return bytes; // You can pass bytes to CSL if needed
+}
+
+// Load CSL if not already present
 async function loadCardanoSerializationLib() {
   try {
     // Load the JavaScript file first
@@ -25,43 +41,16 @@ async function loadCardanoSerializationLib() {
     // Load the WebAssembly file
     await loadWasm(wasmPath);
     console.log("✅ CSL WebAssembly loaded");
+
   } catch (err) {
     console.error("❌ CSL failed to load:", err);
     messageEl.textContent = "⚠️ Serialization library not loaded!";
+    return false;
   }
+  return true;
 }
 
-// Helper function to dynamically load a script
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = src;
-    script.onload = resolve;
-    script.onerror = reject;
-    document.body.appendChild(script);
-  });
-}
-
-// Helper function to load WebAssembly
-function loadWasm(src) {
-  return new Promise((resolve, reject) => {
-    fetch(src)
-      .then(response => response.arrayBuffer())
-      .then(bytes => WebAssembly.instantiate(bytes))
-      .then(resolve)
-      .catch(reject);
-  });
-}
-
-window.addEventListener("load", async () => {
-  // ✅ Load CSL JavaScript and WebAssembly
-  await loadCardanoSerializationLib();
-
-  // Detect and connect to Cardano wallets
-  detectWallets();
-});
-
-// ================ WALLET DETECTION =======================
+// Detect and connect supported wallets
 async function detectWallets() {
   messageEl.textContent = "🔍 Detecting wallets...";
 
@@ -83,7 +72,7 @@ async function detectWallets() {
   renderWalletButtons();
 }
 
-// ================ RENDER WALLET BUTTONS =======================
+// Render wallet connect buttons
 function renderWalletButtons() {
   walletButtonsDiv.innerHTML = "";
 
@@ -102,7 +91,7 @@ function renderWalletButtons() {
     : "⚠️ No supported wallets found.";
 }
 
-// ================ CONNECT WALLET =======================
+// Connect to selected wallet
 async function connectWallet(walletName) {
   try {
     messageEl.textContent = `🔌 Connecting to ${walletName}...`;
@@ -130,7 +119,7 @@ async function connectWallet(walletName) {
   }
 }
 
-// ================ SHOW DELEGATE BUTTON =======================
+// Show delegate button
 function showDelegateButton() {
   delegateSection.innerHTML = "";
   const btn = document.createElement("button");
@@ -140,7 +129,7 @@ function showDelegateButton() {
   delegateSection.appendChild(btn);
 }
 
-// ================ SUBMIT DELEGATION =======================
+// Submit delegation transaction
 async function submitDelegation() {
   try {
     messageEl.textContent = "⏳ Preparing delegation...";
@@ -172,3 +161,16 @@ async function submitDelegation() {
   }
 }
 
+// Sleep utility
+const sleep = ms => new Promise(res => setTimeout(res, ms));
+
+// Initialize application
+window.addEventListener("load", async () => {
+  if (!window.Cardano) {
+    const success = await loadCardanoSerializationLib();
+    if (!success) return;
+  }
+
+  console.log("✅ CSL Loaded:", window.Cardano);
+  detectWallets();
+});

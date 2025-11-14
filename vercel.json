@@ -9,7 +9,7 @@
   ],
   "headers": [
     {
-      "source": "/libs/cardano_serialization_lib_bg.wasm",
+      "source": "./libs/cardano_serialization_lib_bg.wasm",
       "headers": [
         {
           "key": "Content-Type",

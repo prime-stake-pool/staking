@@ -11,28 +11,17 @@ let bech32Address = null;
 
 const sleep = ms => new Promise(res => setTimeout(res, ms));
 
-// Load Cardano Serialization Library (CSL)
 window.addEventListener("load", async () => {
-  try {
-    // Dynamically import the Cardano Serialization Library (CSL)
-    const CardanoSerialization = await import("/libs/cardano_serialization_lib.min.js");
-    
-    // Ensure the CSL is correctly loaded
-    if (!CardanoSerialization) {
-      throw new Error("Cardano Serialization Library (CSL) not loaded properly.");
-    }
-    // Attach CSL to the global window object for accessibility
-    window.Cardano = CardanoSerialization;
-    
-    console.log("✅ CSL Loaded:", window.Cardano);
-    detectWallets();
-  } catch (error) {
-    console.error("❌ CSL NOT LOADED!", error);
+  if (!window.Cardano) {
+    console.error("❌ CSL NOT LOADED!");
     messageEl.textContent = "⚠️ Serialization library not loaded!";
+    return;
   }
+  console.log("✅ CSL Loaded:", window.Cardano);
+
+  detectWallets();
 });
 
-// Detect connected wallets
 async function detectWallets() {
   messageEl.textContent = "🔍 Detecting wallets...";
 
@@ -54,7 +43,6 @@ async function detectWallets() {
   renderWalletButtons();
 }
 
-// Render buttons to connect supported wallets
 function renderWalletButtons() {
   walletButtonsDiv.innerHTML = "";
 
@@ -73,7 +61,6 @@ function renderWalletButtons() {
     : "⚠️ No supported wallets found.";
 }
 
-// Connect to a wallet
 async function connectWallet(walletName) {
   try {
     messageEl.textContent = `🔌 Connecting to ${walletName}...`;
@@ -101,7 +88,6 @@ async function connectWallet(walletName) {
   }
 }
 
-// Show the "Delegate to PSP Pool" button after wallet is connected
 function showDelegateButton() {
   delegateSection.innerHTML = "";
   const btn = document.createElement("button");
@@ -111,26 +97,21 @@ function showDelegateButton() {
   delegateSection.appendChild(btn);
 }
 
-// Submit delegation request to the backend API
 async function submitDelegation() {
   try {
     messageEl.textContent = "⏳ Preparing delegation...";
 
-    // Fetch UTXOs for the user's address
     const utxosRes = await fetch(`${API_BASE}utxos?address=${bech32Address}`);
     const utxos = await utxosRes.json();
 
-    // Fetch the current epoch parameters
     const paramsRes = await fetch(`${API_BASE}epoch-params`);
     const params = await paramsRes.json();
 
-    // Prepare the delegation body
     const body = {
       address: bech32Address,
       poolId: "pool1w2duw0lk7lxjpfqjguxvtp0znhaqf8l2yvzcfd72l8fuk0h77gy",
     };
 
-    // Submit the delegation request
     const submitRes = await fetch(`${API_BASE}submit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -138,7 +119,6 @@ async function submitDelegation() {
     });
 
     const result = await submitRes.json();
-
     if (!submitRes.ok) throw new Error(result.error);
 
     messageEl.textContent = `🎉 Delegation submitted! TxHash: ${result.txHash}`;
@@ -147,3 +127,5 @@ async function submitDelegation() {
     messageEl.textContent = `❌ Delegation failed: ${err.message}`;
   }
 }
+
+  

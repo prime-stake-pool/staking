@@ -6,11 +6,11 @@
       "use": "@vercel/static"
     },
     {
-      "src": "main.js",
+      "src": "libs/cardano_serialization_lib.min.js",
       "use": "@vercel/static"
     },
     {
-      "src": "cardano_serialization_lib_bg.wasm",
+      "src": "libs/cardano_serialization_lib_bg.wasm",
       "use": "@vercel/static"
     }
   ],

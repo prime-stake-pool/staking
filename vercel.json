@@ -6,5 +6,16 @@
   "routes": [
     { "src": "/(.*)", "dest": "/public/$1" },
     { "src": "/", "dest": "/public/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/libs/cardano_serialization_lib_bg.wasm",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/wasm"
+        }
+      ]
+    }
   ]
 }

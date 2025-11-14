@@ -1,21 +1,13 @@
 {
   "version": 2,
   "public": true,
-  "routes": [
+  "headers": [
     {
-      "src": "/libs/(.*)",
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/wasm"
-      }
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/libs/*.wasm",
+      "headers": [
+        { "key": "Content-Type", "value": "application/wasm" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
     }
-  ],
-  "mimeTypes": {
-    "wasm": "application/wasm"
-  }
+  ]
 }
-

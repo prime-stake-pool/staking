@@ -6,8 +6,7 @@
     { "src": "libs/*", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/libs/(.*)", "dest": "/libs/$1" },
-    { "src": "/(.*\\.js)", "dest": "/$1" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
+

@@ -5,8 +5,8 @@
   <title>Cardano Staking</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
 
-  <!-- ✅ Load CSL v11 global browser build (no WASM, works everywhere) -->
-  <script src="https://cdn.jsdelivr.net/npm/@emurgo/cardano-serialization-lib-browser@11.2.1/cardano_serialization_lib.min.js"></script>
+  <!-- ✅ Load CSL v11 global browser build as ES module -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@emurgo/cardano-serialization-lib-browser@11.2.1/cardano_serialization_lib.min.js"></script>
 
   <style>
     body {
@@ -106,7 +106,9 @@
     <p>Powered by <a href="https://primestakepool.com/" target="_blank">Prime Stake Pool</a></p>
   </div>
 
-  <!-- ✅ Load your app -->
+  <!-- ✅ Ensure that the main.js is loaded as a module -->
   <script type="module" src="main.js"></script>
 </body>
 </html>
+
+  

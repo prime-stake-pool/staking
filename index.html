@@ -3,10 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <title>Cardano Staking</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
-  <!-- ✅ Load CSL v15 as ES module from CDN -->
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@emurgo/cardano-serialization-lib-browser@15.0.1/cardano_serialization_lib.min.js"></script>
+  <!-- Load CSL v15 as ES module -->
+  <script type="module">
+    import * as CardanoSerialization from "https://cdn.jsdelivr.net/npm/@emurgo/cardano-serialization-lib-browser@15.0.1/cardano_serialization_lib.js";
+    window.Cardano = CardanoSerialization; // expose globally
+    console.log("✅ CSL Loaded:", window.Cardano);
+  </script>
+
   <style>
     body {
       background: #0d1117;
@@ -105,9 +110,7 @@
     <p>Powered by <a href="https://primestakepool.com/" target="_blank">Prime Stake Pool</a></p>
   </div>
 
-  <!-- ✅ Load main.js as ES module -->
+  <!-- 🔥 Load main.js as ES module -->
   <script type="module" src="main.js"></script>
 </body>
 </html>
-
-     

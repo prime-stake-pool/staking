@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "staticHeaders": [
+  "headers": [
     {
-      "source": "/libs/(.*).wasm",
+      "source": "/libs/(.*)\\.wasm",
       "headers": [
         { "key": "Content-Type", "value": "application/wasm" },
         { "key": "Access-Control-Allow-Origin", "value": "*" }

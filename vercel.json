@@ -1,27 +1,13 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "libs/cardano_serialization_lib.min.js",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "libs/cardano_serialization_lib_bg.wasm",
-      "use": "@vercel/static"
-    }
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "main.js", "use": "@vercel/static" },
+    { "src": "libs/*", "use": "@vercel/static" }
   ],
   "routes": [
-    {
-      "src": "/libs/(.*)",
-      "dest": "/libs/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+    { "src": "/libs/(.*)", "dest": "/libs/$1" },
+    { "src": "/(.*\\.js)", "dest": "/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }

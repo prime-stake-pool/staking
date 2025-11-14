@@ -1,13 +1,18 @@
 {
   "version": 2,
-  "public": true,
-  "headers": [
+  "staticHeaders": [
     {
-      "source": "/libs/*.wasm",
+      "source": "/libs/(.*).wasm",
       "headers": [
         { "key": "Content-Type", "value": "application/wasm" },
         { "key": "Access-Control-Allow-Origin", "value": "*" }
       ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }

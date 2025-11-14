@@ -5,11 +5,15 @@
   <title>Cardano Staking</title>
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
-  <!-- Load CSL v15 as ES module -->
-  <script type="module">
-    import * as CardanoSerialization from "./libs/cardano_serialization_lib.min.js";
-    window.Cardano = CardanoSerialization; // expose globally
-    console.log("✅ CSL Loaded:", window.Cardano);
+  <!-- Load CSL (non-module) -->
+  <script src="./libs/cardano_serialization_lib.min.js"></script>
+  <script>
+    window.addEventListener("load", async () => {
+      // Initialize WASM automatically
+      await CardanoSerializationLib.load();
+      window.Cardano = CardanoSerializationLib;
+      console.log("✅ CSL Loaded:", window.Cardano);
+    });
   </script>
 
   <style>
@@ -107,10 +111,14 @@
   </div>
 
   <div class="footer">
-    <p>Powered by <a href="https://primestakepool.com/" target="_blank">Prime Stake Pool</a></p>
+    <p>Powered by 
+      <a href="https://primestakepool.com/" target="_blank">
+        Prime Stake Pool
+      </a>
+    </p>
   </div>
 
-  <!-- Load main.js as ES module -->
+  <!-- Load main.js AFTER CSL is ready -->
   <script type="module" src="./main.js"></script>
 </body>
 </html>

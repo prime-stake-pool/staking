@@ -171,6 +171,3 @@ async function submitDelegation() {
     messageEl.textContent = `❌ Delegation failed: ${err.message}`;
   }
 }
-
-
-  

@@ -23,6 +23,7 @@ window.addEventListener("load", async () => {
 
 async function detectWallets() {
   messageEl.textContent = "🔍 Detecting wallets...";
+
   let attempts = 0;
   while (attempts < 20) {
     if (window.cardano && Object.keys(window.cardano).length > 0) {
@@ -37,11 +38,13 @@ async function detectWallets() {
     messageEl.textContent = "⚠️ No Cardano wallets detected.";
     return;
   }
+
   renderWalletButtons();
 }
 
 function renderWalletButtons() {
   walletButtonsDiv.innerHTML = "";
+
   SUPPORTED_WALLETS.forEach(name => {
     const wallet = window.cardano[name];
     if (wallet) {
@@ -60,6 +63,7 @@ function renderWalletButtons() {
 async function connectWallet(walletName) {
   try {
     messageEl.textContent = `🔌 Connecting to ${walletName}...`;
+
     const wallet = window.cardano[walletName];
     if (!wallet) throw new Error(`${walletName} not found`);
 
@@ -71,10 +75,9 @@ async function connectWallet(walletName) {
       throw new Error("No used addresses found");
 
     const addrHex = usedAddresses[0];
-    const addrBytes = window.Cardano.Address.from_bytes(
-      Buffer.from(addrHex, "hex")
-    );
+    const addrBytes = window.Cardano.Address.from_bytes(Buffer.from(addrHex, "hex"));
     bech32Address = addrBytes.to_bech32();
+
     messageEl.textContent = `✅ Connected: ${bech32Address.substring(0, 15)}...`;
 
     showDelegateButton();
@@ -123,3 +126,4 @@ async function submitDelegation() {
     messageEl.textContent = `❌ Delegation failed: ${err.message}`;
   }
 }
+

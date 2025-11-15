@@ -19,45 +19,7 @@
       text-align: center;
     }
     h1 {
-      font-size: 2rem;
       color: #58a6ff;
-      margin-bottom: 10px;
-    }
-    #message {
-      font-size: 1.1rem;
-      margin-bottom: 20px;
-      color: #c9d1d9;
-    }
-    #wallet-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 30px;
-    }
-    #wallet-buttons button {
-      background: #238636;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 12px 28px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .delegate-btn {
-      background: #1f6feb;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 14px 36px;
-      font-size: 18px;
-      cursor: pointer;
-    }
-    .footer {
-      text-align: center;
-      margin-top: 80px;
-      font-size: 0.9rem;
-      color: #8b949e;
     }
   </style>
 </head>
@@ -71,16 +33,7 @@
     <div id="delegate-section"></div>
   </div>
 
-  <div class="footer">
-    <p>
-      Powered by
-      <a href="https://primestakepool.com/" target="_blank"
-        >Prime Stake Pool</a
-      >
-    </p>
-  </div>
-
-  <!-- Load CSL (ES Module) -->
+  <!-- DO NOT REMOVE: This loads CSL properly -->
   <script type="module">
     import init, * as CSL from "./libs/cardano_serialization_lib.min.js";
 
@@ -91,7 +44,6 @@
     });
   </script>
 
-  <!-- Main logic -->
   <script type="module" src="./main.js"></script>
 </body>
 </html>

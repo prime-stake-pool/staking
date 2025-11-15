@@ -2,30 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cardano dApp</title>
+  <title>Cardano Staking</title>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+
+  <style>
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 60px auto;
+      text-align: center;
+    }
+    h1 {
+      color: #58a6ff;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="container">
+    <h1>Delegate ADA to PSP</h1>
+    <p id="message">Loading CSL...</p>
 
-  <h1>Cardano dApp</h1>
-  <button id="connectWallet">Connect Wallet</button>
+    <div id="wallet-buttons"></div>
+    <div id="delegate-section"></div>
+  </div>
 
-  <!-- Load CSL (ES Module) -->
+  <!-- DO NOT REMOVE: This loads CSL properly -->
   <script type="module">
-    import init, * as CSL from "./libs/cardano_serialization_lib.js";
+    import init, * as CSL from "./libs/cardano_serialization_lib.min.js";
 
-    // Initialize WASM
     init().then(() => {
-      console.log("✅ CSL WASM Loaded");
-      window.CSL = CSL;
-
-      // Notifies other scripts that CSL is ready
+      window.Cardano = CSL;
+      console.log("✅ CSL Loaded");
       window.dispatchEvent(new Event("csl-loaded"));
     });
   </script>
 
-  <!-- Your main logic -->
   <script type="module" src="./main.js"></script>
-
 </body>
 </html>
+

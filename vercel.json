@@ -1,22 +1,16 @@
 {
   "version": 2,
 
-  "headers": [
+  "routes": [
     {
-      "source": "/libs/(.*)\\.wasm",
-      "headers": [
-        { "key": "Content-Type", "value": "application/wasm" },
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
-        { "key": "Content-Encoding", "value": "identity" }
-      ]
+      "src": "/libs/(.*)\\.wasm",
+      "headers": {
+        "Content-Type": "application/wasm",
+        "Cache-Control": "public, max-age=0, must-revalidate",
+        "Content-Encoding": "identity"
+      }
     }
   ],
-
-  "overrides": {
-    "libs/*.wasm": {
-      "compression": false
-    }
-  },
 
   "rewrites": [
     {
@@ -25,5 +19,6 @@
     }
   ]
 }
+
 
 

@@ -33,18 +33,23 @@
     <div id="delegate-section"></div>
   </div>
 
-  <!-- DO NOT REMOVE: This loads CSL properly -->
+  <!-- Manual WASM loader -->
   <script type="module">
-    import init, * as CSL from "./libs/cardano_serialization_lib.js";
+    import * as CSL from "./libs/cardano_serialization_lib.js";
 
-    init().then(() => {
+    async function loadCSL() {
+      const wasmBytes = await fetch("./libs/cardano_serialization_lib_bg.wasm").then(r => r.arrayBuffer());
+      const wasmInstance = await WebAssembly.instantiate(wasmBytes, {});
+      CSL.__wbg_set_wasm(wasmInstance.instance.exports);
+
       window.Cardano = CSL;
-      console.log("✅ CSL Loaded");
+      console.log("✅ CSL Loaded (manual WASM init)");
       window.dispatchEvent(new Event("csl-loaded"));
-    });
+    }
+
+    loadCSL();
   </script>
 
   <script type="module" src="./main.js"></script>
 </body>
 </html>
-

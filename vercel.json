@@ -1,17 +1,18 @@
 {
   "version": 2,
+
   "headers": [
     {
       "source": "/libs/(.*)\\.wasm",
       "headers": [
-        { "key": "Content-Type", "value": "application/wasm" },
-        { "key": "Access-Control-Allow-Origin", "value": "*" }
+        { "key": "Content-Type", "value": "application/wasm" }
       ]
     }
   ],
+
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!libs/).*)",
       "destination": "/index.html"
     }
   ]

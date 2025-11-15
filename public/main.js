@@ -6,16 +6,18 @@ const SUPPORTED_WALLETS = ["nami", "eternl", "yoroi", "lace"];
 let walletApi = null;
 let bech32Address = null;
 
-// Sleep utility
-const sleep = ms => new Promise(res => setTimeout(res, ms));
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
-// Detect wallets
+// Wait for CSL before loading wallets
+window.addEventListener("csl-loaded", async () => {
+  messageEl.textContent = "Detecting wallets...";
+  detectWallets();
+});
+
+// Detect wallets (Nami, Eternl, Yoroi, Lace)
 async function detectWallets() {
-  messageEl.textContent = "🔍 Detecting wallets...";
-
   let tries = 0;
-  while (tries < 20) {
-    if (window.cardano && Object.keys(window.cardano).length > 0) break;
+  while ((!window.cardano || Object.keys(window.cardano).length === 0) && tries < 20) {
     await sleep(300);
     tries++;
   }
@@ -28,26 +30,28 @@ async function detectWallets() {
   renderWalletButtons();
 }
 
-// Render wallet connect buttons
+// Render wallet buttons dynamically
 function renderWalletButtons() {
   walletButtonsDiv.innerHTML = "";
 
-  SUPPORTED_WALLETS.forEach(name => {
-    const wallet = window.cardano[name];
+  SUPPORTED_WALLETS.forEach((key) => {
+    const wallet = window.cardano[key];
     if (wallet) {
       const btn = document.createElement("button");
-      btn.textContent = `Connect ${wallet.name || name}`;
-      btn.onclick = () => connectWallet(name);
+      btn.textContent = `Connect ${wallet.name || key}`;
+      btn.onclick = () => connectWallet(key);
       walletButtonsDiv.appendChild(btn);
     }
   });
 
-  messageEl.textContent = walletButtonsDiv.innerHTML
-    ? "💡 Select your Cardano wallet to connect:"
-    : "⚠️ No supported wallets found.";
+  if (walletButtonsDiv.innerHTML.trim() !== "") {
+    messageEl.textContent = "💡 Select a wallet to connect:";
+  } else {
+    messageEl.textContent = "⚠️ No supported wallets found.";
+  }
 }
 
-// Connect to wallet
+// Connect wallet
 async function connectWallet(walletName) {
   try {
     messageEl.textContent = `🔌 Connecting to ${walletName}...`;
@@ -63,17 +67,16 @@ async function connectWallet(walletName) {
     );
     bech32Address = addrBytes.to_bech32();
 
-    messageEl.textContent = `✅ Connected: ${bech32Address.slice(0, 15)}...`;
+    messageEl.textContent = `✅ Connected: ${bech32Address.slice(0, 18)}...`;
 
     showDelegateButton();
-
   } catch (err) {
     console.error(err);
     messageEl.textContent = `❌ Wallet connection failed: ${err.message}`;
   }
 }
 
-// Show delegate button
+// Show delegation button
 function showDelegateButton() {
   delegateSection.innerHTML = "";
 
@@ -85,28 +88,11 @@ function showDelegateButton() {
   delegateSection.appendChild(btn);
 }
 
-// Placeholder for delegation logic
+// Placeholder delegation logic
 async function submitDelegation() {
-  messageEl.textContent = "⏳ Building delegation...";
+  messageEl.textContent = "⏳ Building delegation transaction...";
 
-  // TODO: Fill in real-building logic later
-
-  messageEl.textContent = "⚠️ Delegation logic not implemented yet.";
+  // You can paste full delegation builder here later
+  messageEl.textContent =
+    "⚠️ Delegation transaction building is not implemented yet.";
 }
-
-// Init after CSL is ready
-window.addEventListener("load", async () => {
-  // Wait until CSL WASM is fully initialized
-  let tries = 0;
-  while (!window.Cardano && tries < 20) {
-    await sleep(200);
-    tries++;
-  }
-
-  if (!window.Cardano) {
-    messageEl.textContent = "❌ CSL not loaded.";
-    return;
-  }
-
-  detectWallets();
-});

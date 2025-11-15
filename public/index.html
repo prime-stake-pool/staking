@@ -3,47 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <title>Cardano Staking</title>
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-
-  <style>
-    body {
-      background: #0d1117;
-      color: #e6edf3;
-      font-family: "Segoe UI", Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 600px;
-      margin: 60px auto;
-      text-align: center;
-    }
-    h1 {
-      color: #58a6ff;
-    }
-  </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Delegate ADA to PSP</h1>
-    <p id="message">Loading CSL...</p>
+  <p id="message">Loading CSL...</p>
 
-    <div id="wallet-buttons"></div>
-    <div id="delegate-section"></div>
-  </div>
+  <!-- Disable ALL service workers (Fixes Yoroi issue) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        for (let r of regs) {
+          console.log("Unregistering SW:", r);
+          r.unregister();
+        }
+      });
+    }
+  </script>
 
-  <!-- Manual WASM loader -->
+  <!-- Delay to ensure SW is removed -->
+  <script>
+    window.CSL_READY = new Promise(res => setTimeout(res, 300));
+  </script>
+
+  <!-- Load CSL manually -->
   <script type="module">
     import * as CSL from "./libs/cardano_serialization_lib.js";
 
     async function loadCSL() {
+      await window.CSL_READY; // wait for SW unregister
+
       const wasmBytes = await fetch("./libs/cardano_serialization_lib_bg.wasm").then(r => r.arrayBuffer());
       const wasmInstance = await WebAssembly.instantiate(wasmBytes, {});
       CSL.__wbg_set_wasm(wasmInstance.instance.exports);
 
       window.Cardano = CSL;
-      console.log("✅ CSL Loaded (manual WASM init)");
+      console.log("✅ CSL Loaded after SW unregister");
       window.dispatchEvent(new Event("csl-loaded"));
     }
 
@@ -51,5 +45,6 @@
   </script>
 
   <script type="module" src="./main.js"></script>
+
 </body>
 </html>

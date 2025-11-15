@@ -1,20 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Cardano Staking</title>
-  <link rel="icon" href="/favicon.ico" type="image/x-icon">
-
-  <!-- Load CSL (non-module) -->
-  <script src="./libs/cardano_serialization_lib.min.js"></script>
-  <script>
-    window.addEventListener("load", async () => {
-      // Initialize WASM automatically
-      await CardanoSerializationLib.load();
-      window.Cardano = CardanoSerializationLib;
-      console.log("✅ CSL Loaded:", window.Cardano);
-    });
-  </script>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
   <style>
     body {
@@ -24,25 +13,21 @@
       margin: 0;
       padding: 0;
     }
-
     .container {
       max-width: 600px;
-      margin: 60px auto 0 auto;
+      margin: 60px auto;
       text-align: center;
     }
-
     h1 {
       font-size: 2rem;
       color: #58a6ff;
       margin-bottom: 10px;
     }
-
     #message {
       font-size: 1.1rem;
       margin-bottom: 20px;
       color: #c9d1d9;
     }
-
     #wallet-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -50,7 +35,6 @@
       gap: 12px;
       margin-bottom: 30px;
     }
-
     #wallet-buttons button {
       background: #238636;
       color: #fff;
@@ -59,14 +43,7 @@
       padding: 12px 28px;
       font-size: 16px;
       cursor: pointer;
-      transition: all 0.2s ease;
     }
-
-    #wallet-buttons button:hover {
-      background: #2ea043;
-      transform: scale(1.05);
-    }
-
     .delegate-btn {
       background: #1f6feb;
       color: white;
@@ -75,28 +52,12 @@
       padding: 14px 36px;
       font-size: 18px;
       cursor: pointer;
-      transition: all 0.25s ease;
     }
-
-    .delegate-btn:hover {
-      background: #388bfd;
-      transform: scale(1.06);
-    }
-
     .footer {
       text-align: center;
       margin-top: 80px;
       font-size: 0.9rem;
       color: #8b949e;
-    }
-
-    a {
-      color: #58a6ff;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
@@ -104,22 +65,33 @@
 <body>
   <div class="container">
     <h1>Delegate ADA to PSP</h1>
-    <p id="message">Detecting wallets...</p>
+    <p id="message">Loading CSL...</p>
 
     <div id="wallet-buttons"></div>
     <div id="delegate-section"></div>
   </div>
 
   <div class="footer">
-    <p>Powered by 
-      <a href="https://primestakepool.com/" target="_blank">
-        Prime Stake Pool
-      </a>
+    <p>
+      Powered by
+      <a href="https://primestakepool.com/" target="_blank"
+        >Prime Stake Pool</a
+      >
     </p>
   </div>
 
-  <!-- Load main.js AFTER CSL is ready -->
+  <!-- Load CSL (ES Module) -->
+  <script type="module">
+    import init, * as CSL from "./libs/cardano_serialization_lib.min.js";
+
+    init().then(() => {
+      window.Cardano = CSL;
+      console.log("✅ CSL Loaded");
+      window.dispatchEvent(new Event("csl-loaded"));
+    });
+  </script>
+
+  <!-- Main logic -->
   <script type="module" src="./main.js"></script>
 </body>
 </html>
-

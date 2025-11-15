@@ -1,15 +1,14 @@
 {
   "version": 2,
-
   "headers": [
     {
       "source": "/libs/(.*)\\.wasm",
       "headers": [
-        { "key": "Content-Type", "value": "application/wasm" }
+        { "key": "Content-Type", "value": "application/wasm; charset=utf-8" },
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     }
   ],
-
   "rewrites": [
     {
       "source": "/((?!libs/).*)",
@@ -17,3 +16,4 @@
     }
   ]
 }
+

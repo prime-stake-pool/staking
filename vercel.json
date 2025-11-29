@@ -1,14 +1,14 @@
 {
   "version": 2,
-  "headers": [
+  "public": true,
+  "builds": [
+    { "src": "public/**/*", "use": "@vercel/static" }
+  ],
+  "routes": [
     {
-      "source": "/libs/(.*)\\.wasm",
-      "headers": [
-        { "key": "Content-Type", "value": "application/wasm" },
-        { "key": "Access-Control-Allow-Origin", "value": "*" }
-      ]
+      "src": "/(.*)",
+      "dest": "/public/$1"
     }
   ]
 }
-
 

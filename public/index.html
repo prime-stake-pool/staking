@@ -35,14 +35,14 @@
 
   <!-- Correct CSL import for the browser version -->
   <script type="module">
-    import * as CSL from "./libs/cardano_serialization_lib.js";
+  import init from "./libs/cardano_serialization_lib.js";
 
+  init().then((CSL) => {
     window.Cardano = CSL;
     console.log("✅ CSL Loaded");
-
     window.dispatchEvent(new Event("csl-loaded"));
-  </script>
-
+  });
+</script>
   <script type="module" src="./main.js"></script>
 </body>
 </html>

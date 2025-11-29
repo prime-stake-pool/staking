@@ -33,16 +33,20 @@
     <div id="delegate-section"></div>
   </div>
 
-  <!-- Correct CSL import for the browser version -->
-  <!-- Load CSL (browser build v12.0.1) -->
+  <!-- Put this where your old CSL loader was -->
 <script type="module">
-  import init, * as CSL from "./libs/cardano_serialization_lib.js";
+  import initCSL, * as CSL from "./libs/cardano_serialization_lib.js";
 
-  init().then(() => {
+  initCSL().then(() => {
     window.Cardano = CSL;
+    console.log("✅ CSL Loaded (v12.0.1)");
     window.dispatchEvent(new Event("csl-loaded"));
+  }).catch(err => {
+    console.error("CSL init failed:", err);
+    document.getElementById("message").textContent = "⚠️ CSL failed to initialize.";
   });
 </script>
+
   <script type="module" src="./main.js"></script>
 </body>
 </html>

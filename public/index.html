@@ -35,9 +35,9 @@
 
   <!-- Correct CSL import for the browser version -->
   <script type="module">
-  import init from "./libs/cardano_serialization_lib.js";
+  import init, * as CSL from "./libs/cardano_serialization_lib.js";
 
-  init().then((CSL) => {
+  init().then(() => {
     window.Cardano = CSL;
     console.log("✅ CSL Loaded");
     window.dispatchEvent(new Event("csl-loaded"));
